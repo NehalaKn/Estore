@@ -1,0 +1,34 @@
+class  Books(models.Model):
+    name=models.CharField(max_length=200)
+    author=models.CharField(max_length=150)
+    price=models.PositiveIntegerField()
+    publisher=models.CharField(max_length=200)
+    quantity=models.PositiveSmallIntegerField(default=1)
+
+
+orm query for creating an object
+================================
+Modelname.objects.create(filed=value,field2=value2,,,,,,)
+Books.objects.create(name="randamoozham",author="mt",price=450,publisher="abc",quantity=30)
+Books.objects.create(name="arachar",author="k r meera",price=550,publisher="manorama",quantity=50)
+Books.objects.create(name="alcehmist",author="Paulo Coelho",price=600,publisher="DC Books",quantity=100)
+Books.objects.create(name="half girlfriend",author="chetan bhagat",price=650,publisher="DC Books",quantity=150)
+Books.objects.create(name="3 mistakes of my life",author="chetan bhagat",price=630,publisher="DC Books",quantity=200)
+
+orm query for listing all objects
+=================================
+Modelname.objects.all()
+qs=Books.objects.all()
+
+
+fetching a specific resource
+===========================
+Modelname.objects.get(id= )
+data=Books.objects.get(id=3)
+data.price
+data.author
+
+filter queries
+==============
+
+

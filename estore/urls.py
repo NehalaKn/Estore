@@ -15,7 +15,18 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
-
+# from api.views import ProductsView,MorningView,EveningView,AddView,SubView
+from api.views import CubeView,NumchckView,FactorialView,WordCountView,ProductView
 urlpatterns = [
     path('admin/', admin.site.urls),
+    # path("products",ProductsView.as_view()),
+    # path("morning",MorningView.as_view()),
+    # path("evening",EveningView.as_view()),
+    # path("add",AddView.as_view()),
+    # path("subtract",SubView.as_view())
+    path("cube",CubeView.as_view()),
+    path("numchk",NumchckView.as_view()),
+    path("fact",FactorialView.as_view()),
+    path("wordcount",WordCountView.as_view()),
+    path("products",ProductView.as_view())
 ]
