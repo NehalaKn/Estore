@@ -4,8 +4,8 @@ from django.shortcuts import render
 from rest_framework.views import APIView
 
 from rest_framework.response import Response
-from api.models import Books
-from api.serializers import BookSerializer
+from api.models import Books,Reviews
+from api.serializers import BookSerializer,ReviewSerializer
 
 # class ProductsView(APIView):
 #   def get(self,request,*args,**kwargs):
@@ -102,9 +102,74 @@ class ProductView(APIView):
     return Response(data=serializer.data)
 
   def post(self,request,*args,**kwargs):
-    bname=request.data.get("name")
-    bauthor=request.data.get("author")
-    bprice=request.data.get("price")
-    bpublisher=request.data.get("publisher")
-    Books.objects.create(name=bname,author=bauthor,price=bprice,publisher=bpublisher)
-    return Response(data="created")
+    # bname=request.data.get("name")
+    # bauthor=request.data.get("author")
+    # bprice=request.data.get("price")
+    # bpublisher=request.data.get("publisher")
+    # Books.objects.create(name=bname,author=bauthor,price=bprice,publisher=bpublisher)
+    # return Response(data="created")
+    serializer=BookSerializer(data=request.data)
+    if serializer.is_valid():
+      Books.objects.create(**serializer.validated_data)
+      return Response(data=serializer.data)
+    else:
+      return Response(data=serializer.errors)
+
+
+class ProductDetailsView(APIView):
+  def get(self,request,*args,**kwargs):
+    id=kwargs.get("id")
+    Book=Books.objects.get(id=id)
+    serializer=BookSerializer(Book,many=False)
+    return Response(data=serializer.data)
+
+  def  delete(self,request,*args,**kwargs):
+    id=kwargs.get("id")
+    Books.objects.get(id=id).delete()
+    return Response(data="deleted")
+
+  def put(self,request,*args,**kwargs):
+    id=kwargs.get("id")
+    serializer=BookSerializer(data=request.data)
+    if serializer.is_valid():
+      Books.objects.filter(id=id).update(**serializer.validated_data)
+      return Response(data=serializer.data)
+    else:
+      return Response(data=serializer.errors)
+
+
+class ReviewsView(APIView):
+  def get(self,request,*args,**kwargs):
+    reviews=Reviews.objects.all()
+    serializer=ReviewSerializer(reviews,many=True)
+    return Response(data=serializer.data)
+
+  def post(self,request,*args,**kwargs):
+    serializer=ReviewSerializer(data=request.data)
+    if serializer.is_valid():
+      serializer.save()
+      return Response(data=serializer.data)
+    else:
+      return Response(data=serializer.errors)
+
+class ReviewDetailsView(APIView):
+  def get(self,request,*args,**kwargs):
+    id=kwargs.get("id")
+    qs=Reviews.objects.get(id=id)
+    serializer=ReviewSerializer(qs,many=False)
+    return Response(data=serializer.data)
+
+  def put(self,request,*args,**kwargs):
+    id=kwargs.get("id")
+    object=Reviews.objects.get(id=id)
+    serializer=ReviewSerializer(instance=object,data=request.data)
+    if serializer.is_valid():
+      serializer.save()
+      return Response(data=serializer.data)
+    else:
+      return Response(data=serializer.errors)
+
+  def delete(self,request,*args,**kwargs):
+    id=kwargs.get("id")
+    Reviews.objects.get(id=id).delete()
+    return Response(data="deleted")
